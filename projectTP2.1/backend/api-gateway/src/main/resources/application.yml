@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: student-service
+          uri: lb://student-service
+          predicates:
+            - Path=/api/students/**
+        - id: inscription-service
+          uri: lb://inscription-service
+          predicates:
+            - Path=/api/inscriptions/**
+        - id: absence-service
+          uri: lb://absence-service
+          predicates:
+            - Path=/api/absences/**
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/notifications/**
+        - id: composite-service
+          uri: lb://composite-service
+          predicates:
+            - Path=/api/composite/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowedHeaders: "*"
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
